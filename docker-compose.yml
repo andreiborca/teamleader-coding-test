@@ -1,0 +1,13 @@
+services:
+  discounts_calculator:
+    image: php:8.2-cli
+    entrypoint: bash
+    tty: true
+    build:
+      context: ./.docker/php
+      dockerfile: Dockerfile
+    pull_policy: always
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
