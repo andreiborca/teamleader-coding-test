@@ -1,0 +1,25 @@
+{
+    "name": "andreiborca/discount-calculator",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Andrei Borca",
+            "email": "andreiborca@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.3",
+        "mockery/mockery": "^1.6"
+    }
+}
