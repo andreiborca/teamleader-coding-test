@@ -1,10 +1,11 @@
 services:
-  discounts_calculator:
+  cli:
+    container_name: php-cli
     image: php:8.2-cli
     entrypoint: bash
     tty: true
     build:
-      context: ./.docker/php
+      context: ./.docker/php-cli
       dockerfile: Dockerfile
     pull_policy: always
     volumes:
