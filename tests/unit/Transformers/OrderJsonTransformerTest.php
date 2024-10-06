@@ -2,6 +2,7 @@
 
 namespace Tests\Transformers;
 
+use App\Exceptions\InvalidOrderFormatException;
 use App\Transformers\OrderItemTransformer;
 use App\Transformers\OrderJsonTransformer;
 use PHPUnit\Framework\TestCase;
@@ -52,7 +53,20 @@ class OrderJsonTransformerTest extends TestCase
 		$this->assertEquals($orderAsJson, $orderAsString);
 	}
 
-	// json error
+	/**
+	 * @dataProvider orderSamples
+	 * @param string $orderSampleLocation
+	 */
+	public function testInvalidOrderItemType(string $orderSampleLocation)
+	{
+		$orderAsJson = file_get_contents($orderSampleLocation);
+		$transformer = new OrderJsonTransformer(
+			new OrderItemTransformer()
+		);
+
+		$this->expectException(InvalidOrderFormatException::class);
+		$transformer->requestToModel(substr($orderAsJson, 0, 10));
+	}
 
 
 	public static function orderSamples(): iterable
