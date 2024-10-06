@@ -4,13 +4,13 @@ namespace App\Entities;
 
 class Product
 {
-	private int $id;
+	private string $id;
 	private string $description;
 	private int $category;
 	private float $price;
 
-	private function __construct(
-		int $id,
+	public function __construct(
+		string $id,
 		string $description,
 		int $category,
 		float $price,
