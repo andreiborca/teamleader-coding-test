@@ -35,7 +35,7 @@ class OrderJsonTransformer implements OrderTransformerInterface
 
 		$items = [];
 		foreach ($orderAsArray["items"] as $item) {
-			$items[] = $this->orderItemTransformer($item);
+			$items[] = $this->orderItemTransformer->requestToModel($item);
 		}
 
 		return new Order(
