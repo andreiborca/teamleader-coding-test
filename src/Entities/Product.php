@@ -20,7 +20,7 @@ class Product
 		$this->category = $category;
 		$this->price = $price;
 	}
-	public function getId(): int
+	public function getId(): string
 	{
 		return $this->id;
 	}
