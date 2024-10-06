@@ -53,12 +53,12 @@ class OrderJsonTransformer implements OrderTransformerInterface
 		}
 
 		$asArray = [
-			"id" =>  $order->getId(),
-			"customer-id" => $order->getCustomerId(),
+			"id" =>  (string)$order->getId(),
+			"customer-id" => (string)$order->getCustomerId(),
 			"items" => $items,
-			"total" => $order->getTotal(),
+			"total" => number_format($order->getTotal(), 2, ".", ""),
 		];
 
-		return $asArray;
+		return json_encode($asArray);
 	}
 }

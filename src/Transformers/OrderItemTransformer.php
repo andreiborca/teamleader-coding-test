@@ -19,9 +19,9 @@ class OrderItemTransformer implements OrderItemTransformerInterface
 	public function modelToResponse(OrderItem $orderItem) : array {
 		$asArray = [
 			"product-id" => $orderItem->getProductId(),
-			"quantity" => $orderItem->getQuantity(),
-			"unit-price" => $orderItem->getUnitPrice(),
-			"total" => $orderItem->getTotal(),
+			"quantity" => (string)$orderItem->getQuantity(),
+			"unit-price" => number_format($orderItem->getUnitPrice(), 2, ".", ""),
+			"total" => number_format($orderItem->getTotal(), 2, ".", ""),
 		];
 
 		return $asArray;
