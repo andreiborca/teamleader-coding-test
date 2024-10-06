@@ -4,15 +4,17 @@ namespace App\Factories;
 
 use App\Exceptions\InvalidOrderTransformerFactoryFormatException;
 use App\Interfaces\OrderTransformerInterface;
+use App\Transformers\OrderItemTransformer;
 use App\Transformers\OrderJsonTransformer;
 
 class OrderTransformerFactory
 {
 	public static function create(string $format): OrderTransformerInterface {
+		$orderItemTransformer = new OrderItemTransformer();
 		$orderTransformer = null;
 		switch ($format) {
 			case "application/json":
-				$orderTransformer = new OrderJsonTransformer();
+				$orderTransformer = new OrderJsonTransformer($orderItemTransformer);
 				break;
 			default:
 				throw new InvalidOrderTransformerFactoryFormatException(
