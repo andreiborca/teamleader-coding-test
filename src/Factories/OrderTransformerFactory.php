@@ -23,7 +23,7 @@ class OrderTransformerFactory
 				);
 				break;
 		}
-		
+
 		return $orderTransformer;
 	}
 }
