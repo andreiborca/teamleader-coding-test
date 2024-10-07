@@ -24,6 +24,16 @@ class OrderItemTransformer implements OrderItemTransformerInterface
 			"total" => number_format($orderItem->getTotal(), 2, ".", ""),
 		];
 
+		$discounts = [];
+
+		if ($orderItem->getFreeQuantity() > 0) {
+			$discounts["free-quantity"] = (string)$orderItem->getFreeQuantity();
+		}
+
+		if (!empty($discounts)) {
+			$asArray["discounts"] = $discounts;
+		}
+
 		return $asArray;
 	}
 }
