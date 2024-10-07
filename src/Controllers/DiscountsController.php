@@ -3,12 +3,14 @@
 namespace App\Controllers;
 
 use App\DiscountRules\CustomerRevenueOver;
+use App\DiscountRules\FreeItemOnQuantity;
 use App\Exceptions\InvalidOrderFormatException;
 use App\Exceptions\InvalidOrderTransformerFactoryFormatException;
 use App\Factories\OrderTransformerFactory;
 use App\Interfaces\CustomerRepositoryInterface;
 use App\Interfaces\DiscountRuleInterface;
 use App\Repositories\CustomerRepository;
+use App\Repositories\ProductsRepository;
 use App\Services\DiscountsApplierService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -27,6 +29,16 @@ class DiscountsController
 	{
 		// TODO: inject the customer repository through service container.
 		$this->customerRepository = new CustomerRepository();
+		// TODO: inject the product repository through service container.
+		$productRepository = new ProductsRepository();
+
+		$freeItemsCategoryId = 2;
+		$this->discountRules["product"][] = new FreeItemOnQuantity(
+			$freeItemsCategoryId,
+			5,
+			1,
+			$productRepository->getAllProductsIdFromCategory($freeItemsCategoryId),
+		);
 
 		$this->discountRules["order"][] = new CustomerRevenueOver(1000, "10%");
 
