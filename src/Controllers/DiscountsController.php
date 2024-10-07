@@ -9,6 +9,7 @@ use App\Factories\OrderTransformerFactory;
 use App\Interfaces\CustomerRepositoryInterface;
 use App\Interfaces\DiscountRuleInterface;
 use App\Repositories\CustomerRepository;
+use App\Services\DiscountsApplierService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -20,12 +21,15 @@ class DiscountsController
 	 * @var DiscountRuleInterface[]
 	 */
 	private array $discountRules;
+	private DiscountsApplierService $discountApplierService;
+
 	public function __construct()
 	{
 		// TODO: inject the customer repository through service container.
 		$this->customerRepository = new CustomerRepository();
 
 		$this->discountRules["order"][] = new CustomerRevenueOver(1000, "10%");
+
 		$this->discountApplierService = new DiscountsApplierService($this->discountRules);
 	}
 
@@ -43,6 +47,7 @@ class DiscountsController
 
 			// apply the discount rules
 			$order = $orderTransformer->requestToModel($requestBody["order"]);
+			$this->discountApplierService->apply($order, $customer);
 
 			// build the response
 			$response->getBody()->write(
