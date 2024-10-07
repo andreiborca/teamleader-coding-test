@@ -49,23 +49,4 @@ class FreeItemOnQuantity implements DiscountRuleInterface
 		}
 	}
 
-	private function calculateQuantities(int $orderedQuantity) : array {
-		$quantities = [
-			"paidQuantity" => 0,
-			"freeQuantity" => 0,
-		];
-
-		while ($orderedQuantity >= 5 ) {
-			$quantities["paidQuantity"] += 5;
-			$quantities["freeQuantity"] += 1;
-
-			$orderedQuantity -= 6;
-		}
-
-		if ($orderedQuantity > 0) {
-			$quantities["paidQuantity"] += $orderedQuantity;
-		}
-
-		return $quantities;
-	}
 }
