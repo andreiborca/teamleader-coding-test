@@ -23,10 +23,12 @@ class DiscountsController
 	public function __construct()
 	{
 		// TODO: inject the customer repository through service container.
+		$this->customerRepository = new CustomerRepository();
 
 		$this->discountRules["order"][] = new CustomerRevenueOver(1000, "10%");
 		$this->discountApplierService = new DiscountsApplierService($this->discountRules);
 	}
+
 	public function calculate(
 		Request $request,
 		Response $response,
