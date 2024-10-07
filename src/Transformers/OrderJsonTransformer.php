@@ -59,6 +59,10 @@ class OrderJsonTransformer implements OrderTransformerInterface
 			"total" => number_format($order->getTotal(), 2, ".", ""),
 		];
 
+		if (!empty($order->getDiscounts())) {
+			$asArray["discounts"] = $order->getDiscounts();
+		}
+
 		return json_encode($asArray);
 	}
 }
