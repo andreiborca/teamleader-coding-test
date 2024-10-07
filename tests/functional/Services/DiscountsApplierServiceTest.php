@@ -3,6 +3,7 @@
 namespace Tests\Services;
 
 use App\DiscountRules\CustomerRevenueOver;
+use App\DiscountRules\FreeItemOnQuantity;
 use App\Entities\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -52,6 +53,60 @@ class DiscountsApplierServiceTest extends TestCase
 		$order = $discountsService->apply($order, $customer);
 
 		$this->assertEmpty($order->getDiscounts());
+	}
+
+	/**
+	 * @dataProvider dataSets
+	 *
+	 * @param Order $order
+	 * @param Customer $customer
+	 *
+	 * @throws Exception
+	 */
+	public function testFreeItemOnQuantityIsApplicable(Order $order, Customer $customer) {
+		$discountRule = new FreeItemOnQuantity(
+			2,
+			5,
+			1,
+			["B101", "B102", "B103"],
+		);
+		$discountsService = new DiscountsApplierService([
+			"product" => [$discountRule]
+		]);
+
+		$order = $discountsService->apply($order, $customer);
+
+		$this->assertEquals(
+			2,
+			$order->getItems()[0]->getFreeQuantity(),
+		);
+	}
+
+	/**
+	 * @dataProvider dataSets
+	 *
+	 * @param Order $order
+	 * @param Customer $customer
+	 *
+	 * @throws Exception
+	 */
+	public function testFreeItemOnQuantityIsNotApplicable(Order $order, Customer $customer) {
+		$discountRule = new FreeItemOnQuantity(
+			1,
+			5,
+			1,
+			["A101", "A102"],
+		);
+		$discountsService = new DiscountsApplierService([
+			"product" => [$discountRule]
+		]);
+
+		$order = $discountsService->apply($order, $customer);
+
+		$this->assertEquals(
+			0,
+			$order->getItems()[0]->getFreeQuantity(),
+		);
 	}
 
 	public static function dataSets() : iterable
