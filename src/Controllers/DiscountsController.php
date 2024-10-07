@@ -2,10 +2,12 @@
 
 namespace App\Controllers;
 
+use App\DiscountRules\CustomerRevenueOver;
 use App\Exceptions\InvalidOrderFormatException;
 use App\Exceptions\InvalidOrderTransformerFactoryFormatException;
 use App\Factories\OrderTransformerFactory;
 use App\Interfaces\CustomerRepositoryInterface;
+use App\Interfaces\DiscountRuleInterface;
 use App\Repositories\CustomerRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -13,9 +15,16 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class DiscountsController
 {
 	private CustomerRepositoryInterface $customerRepository;
+
+	/**
+	 * @var DiscountRuleInterface[]
+	 */
+	private array $discountRules;
 	public function __construct()
 	{
 		// TODO: inject the customer repository through service container.
+
+		$this->discountRules["order"][] = new CustomerRevenueOver(1000, "10%");
 		$this->discountApplierService = new DiscountsApplierService($this->discountRules);
 	}
 	public function calculate(
