@@ -27,6 +27,9 @@ class DiscountsApplierService
 	}
 
 	public function apply(Order $order, Customer $user) : Order {
+		foreach ($this->discountRules["product"] as $discountRule) {
+			$discountRule->applyDiscount($order);
+		}
 
 		foreach ($this->discountRules["order"] as $discountRule) {
 			$discountRule->applyCustomerDiscount($order, $user);
