@@ -25,6 +25,11 @@ final class CustomerRevenueOver implements DiscountRuleInterface
 		return $amount > $this->revenue;
 	}
 
+	/**
+	 * @param Order $order
+	 *
+	 * @throws Exception
+	 */
 	public function applyDiscount(Order &$order) {
 		if (!isset($this->customer)) {
 			throw new Exception("Missing customer data. Use method CustomerRevenueOver::applyCustomerDiscount");
