@@ -8,6 +8,7 @@ class OrderItem implements SplSubject
 	private int $quantity;
 	private float $unitPrice;
 	private float $total;
+	private int $freeQuantity;
 
 	public function __construct(
 		string $productId,
@@ -50,5 +51,15 @@ class OrderItem implements SplSubject
 	private function calculateTotal() {
 		$this->total = $this->quantity * $this->unitPrice;
 		$this->notify();
+	}
+
+	public function getFreeQuantity(): int
+	{
+		return $this->freeQuantity;
+	}
+
+	public function setFreeQuantity(int $freeQuantity): void
+	{
+		$this->freeQuantity = $freeQuantity;
 	}
 }
