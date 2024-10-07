@@ -47,6 +47,7 @@ class DiscountsController
 
 			// apply the discount rules
 			$order = $orderTransformer->requestToModel($requestBody["order"]);
+			$customer = $this->customerRepository->findCustomerById($order->getCustomerId());
 			$this->discountApplierService->apply($order, $customer);
 
 			// build the response
