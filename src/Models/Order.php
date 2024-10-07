@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
+use App\DiscountRules\Traits\PercentageDiscountsTrait;
 use Exception;
 
 class Order implements SplObserver
 {
+	use PercentageDiscountsTrait;
+
 	private int $id;
 	private int $customerId;
 	/** @var OrderItem[] */
 	private array $items;
 	private float $total;
+	private array $discounts = [];
 
 	/**
 	 * Order constructor.
@@ -54,6 +58,16 @@ class Order implements SplObserver
 		return $this->total;
 	}
 
+	public function addDiscount($discount, string $discountType) : self {
+		$this->discounts[$discountType] = $discount;
+		$this->calculateTotal();
+		return $this;
+	}
+
+	public function getDiscounts() : array {
+		return $this->discounts;
+	}
+
 	/**
 	 * @param array $items
 	 *
@@ -82,6 +96,14 @@ class Order implements SplObserver
 		foreach ($this->items as $item) {
 			$total += $item->getTotal();
 		}
+		foreach ($this->discounts as $type => $discount) {
+			switch ($type) {
+				case "percentage":
+					$total = $this->applyPercentageDiscount($total, $discount);
+					break;
+			}
+		}
+
 		$this->total = $total;
 	}
 }
