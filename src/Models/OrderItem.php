@@ -8,7 +8,7 @@ class OrderItem implements SplSubject
 	private int $quantity;
 	private float $unitPrice;
 	private float $total;
-	private int $freeQuantity;
+	private int $freeQuantity = 0;
 
 	public function __construct(
 		string $productId,
