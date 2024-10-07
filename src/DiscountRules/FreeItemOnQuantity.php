@@ -48,5 +48,4 @@ class FreeItemOnQuantity implements DiscountRuleInterface
 			}
 		}
 	}
-
 }
