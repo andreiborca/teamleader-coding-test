@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\DiscountRules\CustomerRevenueOver;
 use App\DiscountRules\FreeItemOnQuantity;
+use App\Exceptions\InvalidOrderDataException;
 use App\Exceptions\InvalidOrderFormatException;
 use App\Exceptions\InvalidOrderTransformerFactoryFormatException;
 use App\Factories\OrderTransformerFactory;
@@ -60,13 +61,18 @@ class DiscountsController
 			// apply the discount rules
 			$order = $orderTransformer->requestToModel($requestBody["order"]);
 			$customer = $this->customerRepository->findCustomerById($order->getCustomerId());
+
+			if (!$customer) {
+				throw new InvalidOrderDataException("Order contains invalid customer reference.");
+			}
+
 			$this->discountApplierService->apply($order, $customer);
 
 			// build the response
 			$response->getBody()->write(
 				$orderTransformer->modelToResponse($order)
 			);
-		} catch (InvalidOrderFormatException $exception) {
+		} catch (InvalidOrderFormatException|InvalidOrderDataException $exception) {
 			$response = $response->withStatus(400);
 			$response->getBody()->write(
 				json_encode([
