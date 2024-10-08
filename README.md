@@ -1,27 +1,78 @@
-# Coding Test
+# Setting up the project
+After you cloned the project, take the following step:
+1. run from CMD the `composer install` command to get the required dependencies.
+2. start the project using `docker compose up --build` command
+3. To check that the project is up and running access from a browser the following URL `http://localhost:8080/`.
+If everything is ok you should see the following message 'Hello, Slim Framework on Docker!'.
 
-Do you want to join the engineering team at [Teamleader](https://www.teamleader.eu/company/engineering)?
+# Accessing the discount functionality
+URL: http://localhost:8080/discounts/calculate
+Request Method: POST
+Request Header parameters:
+    - Content-Type: application/json
+Query String parameter:
+    - order : and as value a valid json string
 
-We have created this exercise in order to gain insights into your development skills.
+***Recommendation:*** For the post request use Postman or any alike tool.
 
-## What to do?
+# Made decision's
+## Docker
+Added 3 containers:
+- cli: used for running the commands from CLI. From here I executed the test command `vendor/bin/phpunit`
+- app: serves as the container which serves the access from browser, Postman etc
+- webserver: the scope was to have nginx and virtual hosts
+The `.docker` folder contains the required Dockerfile and configuration files for containers
 
-We have several problems to solve. Our recruiter would have normally told you which one(s) to solve.
+## Code
+Used Slim Framework to benefit of route feature, and some objects like Request/Response for controllers. 
+The routes are defined in `public\index.php` and as improvement  
 
-You are free to use whatever technologies you want, unless instructed otherwise.
+The (micro)service logic is found under `src` folder.
+Tried to use SOLID as much as possible so that the functionality to be easy to extend the existing functionality based 
+on business needs.
 
-- [Problem 1 : Discounts](./1-discounts.md)
-- [Problem 2 : Ordering](./2-ordering.md)
-- [Problem 3 : Local development](./3-local-development.md)
+### Models 
+The scope of the classes from this folder serve as DTO's to be able the pass through the flow the received information 
+through request. Also, this classes contain business regarding on how to calculate the total of an order, or an order 
+item based on the applied discount(s).
 
-## Procedure
+### Transformers
+The scope of the classes from this folder is to:
+- translate the received information through request to the DTO's
+- translate an DTO to the required format for the answer (fields, values format)
+The transformers can act like an anticoruption layer, in case the contract of request or response will change.
+***Note:*** The response will be formatted under the same format how the data was receives.
+  
+### Factories
+#### OrderTransformerFactory
+This factory requires the value of the field `Content-Type` from request header. Based on this field the (micro)service
+will know of how the received information is formatted. Current implementation supports only json string.
+In case in future the application will require another format (e.g. XML), it will be required to implement an XML 
+transformer and extend the factory to be able to initialize the new transformer.
 
-We would like you to send us (a link to) a git repository (that we can access).  
+### Entities & Repositories
+It was decided that the files from folder `data` to mimic the records stored in a DB. This decision was made because for
+using a DB it would have been required to write also migrations to create the tables and insert the data. The seeders are
+not taken in consideration as the information from `data` folder must be inserted only once.
+Starting from the assumption that the (micro)service can communicate with the DB, the following approach was taken:
+- Entities will serve as immutable ObjectValues for DB records.
+- Repositories mimic the layer which retrieve's the information from DB, even though the required information is 
+  identified from loaded data from files.
+  
+### Discount rules
+The scope of the classes from this folder is to implemented the criteria for the discounts, and the logic to identify 
+when a discount should be applied and when not. Also, this classes need to know that the discount which they represent
+need's to be applied on order or order item level.
 
-Make sure to add some documentation on how to run your app.
+### Services
+#### DiscountApplierService
+This service functionality is to parse through the discount rules, and to know in which order the discount rules need 
+to be applied.
 
-There is no time limit on this exercise, take as long as you need to show us your development skills.
+## Awareness of improvements
+On `DiscountsController` inject the instances for DiscountsApplierService, repositories and discount rules through the 
+service container (DI container), as the controller should not be aware of how they are initialized.
+The only scope of the controller should be to know how to process the request.
 
-## Problems?
-
-Feel free to contact us if something is not clear.
+For tests reduce code duplication by moving some instantiations or setting some values in on of the following methods 
+`setUp()` or `setUpBeforeClass()` based on usage scope. 
