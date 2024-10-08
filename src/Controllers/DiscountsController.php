@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\DiscountRules\CheapestProductOfCategory;
 use App\DiscountRules\CustomerRevenueOver;
 use App\DiscountRules\FreeItemOnQuantity;
 use App\Exceptions\InvalidOrderDataException;
@@ -39,6 +40,13 @@ class DiscountsController
 			5,
 			1,
 			$productRepository->getAllProductsIdFromCategory($freeItemsCategoryId),
+		);
+
+		$productCategoryId = 1;
+		$this->discountRules["product"][] = new CheapestProductOfCategory(
+			$productCategoryId,
+			"20%",
+			$productRepository->getProductsPriceForCategory($productCategoryId),
 		);
 
 		$this->discountRules["order"][] = new CustomerRevenueOver(1000, "10%");
