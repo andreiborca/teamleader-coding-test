@@ -43,7 +43,7 @@ class FreeItemOnQuantity implements DiscountRuleInterface
 	{
 		foreach ($order->getItems() as &$orderItem) {
 			if ($this->isCriteriaMeet($orderItem->getProductId(), $orderItem->getQuantity())) {
-				$freeQuantity = $orderItem->getQuantity() / $this->quantityCriterion;
+				$freeQuantity = intdiv($orderItem->getQuantity(), $this->quantityCriterion);
 				$orderItem->setFreeQuantity($freeQuantity);
 			}
 		}
