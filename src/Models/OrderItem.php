@@ -50,7 +50,18 @@ class OrderItem implements SplSubject
 	}
 
 	private function calculateTotal() {
-		$this->total = $this->quantity * $this->unitPrice;
+		$total = $this->quantity * $this->unitPrice;
+
+		foreach ($this->discounts as $type => $discount) {
+			switch ($type) {
+				case "percentage":
+					$total = $this->applyPercentageDiscount($total, $discount);
+					break;
+			}
+		}
+
+		$this->total = $total;
+
 		$this->notify();
 	}
 
