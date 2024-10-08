@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\DiscountRules\Traits\PercentageDiscountsTrait;
+use App\Models\Traits\DiscountsTrait;
 class OrderItem implements SplSubject
 {
+	use DiscountsTrait;
 	use PercentageDiscountsTrait;
 
 	private string $productId;
@@ -54,7 +57,7 @@ class OrderItem implements SplSubject
 	private function calculateTotal() {
 		$total = $this->quantity * $this->unitPrice;
 
-		foreach ($this->discounts as $type => $discount) {
+		foreach ($this->getDiscounts() as $type => $discount) {
 			switch ($type) {
 				case "percentage":
 					$total = $this->applyPercentageDiscount($total, $discount);
@@ -75,15 +78,5 @@ class OrderItem implements SplSubject
 	public function setFreeQuantity(int $freeQuantity): void
 	{
 		$this->freeQuantity = $freeQuantity;
-	}
-
-	public function addDiscount($discount, string $discountType) : self {
-		$this->discounts[$discountType] = $discount;
-		$this->calculateTotal();
-		return $this;
-	}
-
-	public function getDiscounts() : array {
-		return $this->discounts;
 	}
 }
