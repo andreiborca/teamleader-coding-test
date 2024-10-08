@@ -4,6 +4,8 @@ namespace App\Models;
 
 class OrderItem implements SplSubject
 {
+	use PercentageDiscountsTrait;
+
 	private string $productId;
 	private int $quantity;
 	private float $unitPrice;
