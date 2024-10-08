@@ -4,7 +4,8 @@ namespace App\Models;
 
 use App\DiscountRules\Traits\PercentageDiscountsTrait;
 use App\Models\Traits\DiscountsTrait;
-class OrderItem implements SplSubject
+
+class OrderItem
 {
 	use DiscountsTrait;
 	use PercentageDiscountsTrait;
@@ -14,7 +15,6 @@ class OrderItem implements SplSubject
 	private float $unitPrice;
 	private float $total;
 	private int $freeQuantity = 0;
-	private array $discounts = [];
 
 	public function __construct(
 		string $productId,
@@ -27,6 +27,7 @@ class OrderItem implements SplSubject
 		$this->unitPrice = $unitPrice;
 		$this->total = $total;
 	}
+
 	public function getProductId(): string
 	{
 		return $this->productId;
@@ -66,8 +67,6 @@ class OrderItem implements SplSubject
 		}
 
 		$this->total = $total;
-
-		$this->notify();
 	}
 
 	public function getFreeQuantity(): int

@@ -6,7 +6,7 @@ use App\DiscountRules\Traits\PercentageDiscountsTrait;
 use App\Models\Traits\DiscountsTrait;
 use Exception;
 
-class Order implements SplObserver
+class Order
 {
 	use DiscountsTrait;
 	use PercentageDiscountsTrait;
@@ -56,6 +56,7 @@ class Order implements SplObserver
 
 	public function getTotal(): float
 	{
+		$this->calculateTotal();
 		return $this->total;
 	}
 
