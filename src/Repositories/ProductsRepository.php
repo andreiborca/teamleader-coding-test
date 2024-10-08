@@ -24,4 +24,19 @@ class ProductsRepository implements ProductsRepositoryInterface
 
 		return $productsId;
 	}
+
+	public function getProductsPriceForCategory(int $categoryId) : array {
+		$productsPrice = [];
+
+		foreach ($this->products as $product) {
+			if ($categoryId == $product["category"]) {
+				$productsPrice[] = [
+					"id" => $product["id"],
+					"price" => (float)$product["price"],
+				];
+			}
+		}
+
+		return $productsPrice;
+	}
 }
