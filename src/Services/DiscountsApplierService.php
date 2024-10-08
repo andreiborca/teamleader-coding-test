@@ -17,11 +17,9 @@ class DiscountsApplierService
 	 * DiscountsApplierService constructor.
 	 *
 	 * @param DiscountRuleInterface[] $discountRules
-//	 * @param array $productsList
 	 */
 	public function __construct(
 		array $discountRules,
-//		array $productsList,
 	) {
 		$this->discountRules = $discountRules;
 	}
