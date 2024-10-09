@@ -10,19 +10,19 @@ use \Exception;
 final class CustomerRevenueOver implements DiscountRuleInterface
 {
 	private string $percentage;
-	private float $revenue;
+	private float $revenueOver;
 	private Customer|null $customer = null;
 
 	public function __construct(
-		float $revenue,
+		float $revenueOver,
 		string $percentage,
 	) {
-		$this->revenue = $revenue;
+		$this->revenueOver = $revenueOver;
 		$this->percentage = $percentage;
 	}
 
 	private function isCriterionMeet($amount) : bool {
-		return $amount > $this->revenue;
+		return $amount > $this->revenueOver;
 	}
 
 	/**
