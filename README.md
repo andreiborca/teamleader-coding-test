@@ -49,6 +49,8 @@ This factory requires the value of the field `Content-Type` from request header.
 will know of how the received information is formatted. Current implementation supports only json string.
 In case in future the application will require another format (e.g. XML), it will be required to implement an XML 
 transformer and extend the factory to be able to initialize the new transformer.
+#### DiscountRulesFactory
+This factory need to know how to read the required information from DB and how to initialize each type of discount rule. 
 
 ### Entities & Repositories
 It was decided that the files from folder `data` to mimic the records stored in a DB. This decision was made because for
@@ -58,6 +60,8 @@ Starting from the assumption that the (micro)service can communicate with the DB
 - Entities will serve as immutable ObjectValues for DB records.
 - Repositories mimic the layer which retrieve's the information from DB, even though the required information is 
   identified from loaded data from files.
+A new file named discounts-rules.json was added to folder `data` to mimic the structure of how discount rule are being
+stored into a DB table
   
 ### Discount rules
 The scope of the classes from this folder is to implemented the criteria for the discounts, and the logic to identify 
