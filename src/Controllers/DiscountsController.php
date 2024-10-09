@@ -2,16 +2,15 @@
 
 namespace App\Controllers;
 
-use App\DiscountRules\CheapestProductOfCategory;
-use App\DiscountRules\CustomerRevenueOver;
-use App\DiscountRules\FreeItemOnQuantity;
 use App\Exceptions\InvalidOrderDataException;
 use App\Exceptions\InvalidOrderFormatException;
 use App\Exceptions\InvalidOrderTransformerFactoryFormatException;
+use App\Factories\DiscountRulesFactory;
 use App\Factories\OrderTransformerFactory;
 use App\Interfaces\CustomerRepositoryInterface;
 use App\Interfaces\DiscountRuleInterface;
 use App\Repositories\CustomerRepository;
+use App\Repositories\DiscountRulesRepository;
 use App\Repositories\ProductsRepository;
 use App\Services\DiscountsApplierService;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -33,25 +32,17 @@ class DiscountsController
 		$this->customerRepository = new CustomerRepository();
 		// TODO: inject the product repository through service container.
 		$productRepository = new ProductsRepository();
+		// TODO: inject the discount rules repository through service container.
+		$discountRulesRepository = new DiscountRulesRepository();
 
-		$freeItemsCategoryId = 2;
-		$this->discountRules["product"][] = new FreeItemOnQuantity(
-			$freeItemsCategoryId,
-			5,
-			1,
-			$productRepository->getAllProductsIdFromCategory($freeItemsCategoryId),
+		$discountRulesFactory = new DiscountRulesFactory(
+			$discountRulesRepository,
+			$productRepository,
 		);
 
-		$productCategoryId = 1;
-		$this->discountRules["product"][] = new CheapestProductOfCategory(
-			$productCategoryId,
-			"20%",
-			$productRepository->getProductsPriceForCategory($productCategoryId),
+		$this->discountApplierService = new DiscountsApplierService(
+			$discountRulesFactory->create(),
 		);
-
-		$this->discountRules["order"][] = new CustomerRevenueOver(1000, "10%");
-
-		$this->discountApplierService = new DiscountsApplierService($this->discountRules);
 	}
 
 	public function calculate(
