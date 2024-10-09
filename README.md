@@ -80,3 +80,7 @@ The only scope of the controller should be to know how to process the request.
 
 For tests reduce code duplication by moving some instantiations or setting some values in on of the following methods 
 `setUp()` or `setUpBeforeClass()` based on usage scope. 
+Add:
+- unit testing for `DiscountController` by mocking the parameters of constructor and instantiate the parameters of 
+  method calculate like in a real HTTP request on the endpoint
+- functional testing for `DiscountController` by making request's to the endpoint
