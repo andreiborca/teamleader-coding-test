@@ -8,9 +8,6 @@ use DateTime;
 
 class CustomerRepository implements CustomerRepositoryInterface
 {
-	/**
-	 * @var Customer[]
-	 */
 	private array $customers;
 
 	public function __construct()
