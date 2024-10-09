@@ -1,0 +1,28 @@
+[
+  {
+    "id": "1",
+    "type": "CustomerRevenueOver",
+    "discount-rules": {
+      "revenue-over": "1000",
+      "percentage": "10%"
+    }
+  },
+  {
+    "id": "2",
+    "type": "FreeItemOnQuantity",
+    "discount-rules": {
+      "product-category-id": "2",
+      "quantity-criterion": "5",
+      "free-quantity": "1"
+    }
+  },
+  {
+    "id": "3",
+    "type": "CheapestProductOfCategory",
+    "discount-rules": {
+      "categoryId": "1",
+      "minimum_distinct_products": "2",
+      "percentage": "20%"
+    }
+  }
+]
