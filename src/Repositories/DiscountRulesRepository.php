@@ -14,7 +14,7 @@ class DiscountRulesRepository
 	public function __construct()
 	{
 		$discountRules = json_decode(
-			file_get_contents(realpath(".") . "/../data/discount-rule0s.json"),
+			file_get_contents(realpath(".") . "/../data/discount-rules.json"),
 			true
 		);
 
