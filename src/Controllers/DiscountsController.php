@@ -20,10 +20,6 @@ class DiscountsController
 {
 	private CustomerRepositoryInterface $customerRepository;
 
-	/**
-	 * @var DiscountRuleInterface[]
-	 */
-	private array $discountRules;
 	private DiscountsApplierService $discountApplierService;
 
 	public function __construct()
