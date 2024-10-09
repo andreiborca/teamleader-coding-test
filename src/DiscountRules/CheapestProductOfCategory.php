@@ -11,15 +11,18 @@ class CheapestProductOfCategory implements DiscountRuleInterface
 	private string $categoryId;
 	private string $percentage;
 	private array $productsPrice;
+	private int $minimumDistinctProducts;
 
 	public function __construct(
 		int $categoryId,
+		int $minimumDistinctProducts,
 		string $percentage,
 		array $productsPrice,
 	) {
 		$this->categoryId = $categoryId;
 		$this->percentage = $percentage;
 		$this->productsPrice = $productsPrice;
+		$this->minimumDistinctProducts = $minimumDistinctProducts;
 	}
 
 	public function applyDiscount(Order &$order) : Order {
@@ -58,7 +61,7 @@ class CheapestProductOfCategory implements DiscountRuleInterface
 	}
 
 	private function isCriterionMeet($orderItemsOfCategory) : bool {
-		return count($orderItemsOfCategory) >= 2;
+		return count($orderItemsOfCategory) >= $this->minimumDistinctProducts;
 	}
 
 	private function identifyCheapestProduct(array $orderItems) : array {

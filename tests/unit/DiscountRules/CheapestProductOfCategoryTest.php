@@ -16,6 +16,7 @@ class CheapestProductOfCategoryTest extends TestCase
 	public function testRuleIsApplicable() {
 		$discountRule = new CheapestProductOfCategory(
 			1,
+			2,
 			"20%",
 			[
 				[
@@ -56,6 +57,7 @@ class CheapestProductOfCategoryTest extends TestCase
 	public function testRuleNotIsApplicable() {
 		$discountRule = new CheapestProductOfCategory(
 			1,
+			2,
 			"20%",
 			[
 				[
@@ -95,6 +97,7 @@ class CheapestProductOfCategoryTest extends TestCase
 	public function testRuleNotIsApplicableEvenThoughProductIsFromCategory() {
 		$discountRule = new CheapestProductOfCategory(
 			1,
+			2,
 			"20%",
 			[
 				[
